@@ -34,14 +34,14 @@ namespace OpenMovie.API.Endpoints
                     {
                         Name = "s",
                         In = ParameterLocation.Query,
-                        //Required = true,
+                        Required = true,
                         Description = "The title of the movie to search for."
                     },
                     new OpenApiParameter
                     {
                         Name = "apikey",
                         In = ParameterLocation.Query,
-                        //Required = true,
+                        Required = true,
                         Description = "The API key to access the movie information from the external service."
                     }
                 };
