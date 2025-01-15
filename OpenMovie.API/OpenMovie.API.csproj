@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c9c30926-15db-4752-b476-dc5d0867f917</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carter" Version="8.2.1" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenMovie.Application.CQRS.Handlers\OpenMovie.Application.CQRS.Handlers.csproj" />
+    <ProjectReference Include="..\OpenMovie.Application.Services\OpenMovie.Application.Services.csproj" />
+    <ProjectReference Include="..\OpenMovie.Core.Interfaces\OpenMovie.Core.Interfaces.csproj" />
+    <ProjectReference Include="..\OpenMovie.Infrastructure.Interfaces\OpenMovie.Infrastructure.Interfaces.csproj" />
+    <ProjectReference Include="..\OpenMovie.Infrastructure.Services\OpenMovie.Infrastructure.Services.csproj" />
+  </ItemGroup>
+
+</Project>
