@@ -5,13 +5,12 @@ using OpenMovie.Core.Interfaces;
 using OpenMovie.Infrastructure.Interfaces;
 using OpenMovie.Infrastructure.Services;
 using OpenMovie.Application.CQRS.Handlers.Extensions;
-using OpenMovie.Application.CQRS.Handlers;
-using MediatR;
 using Microsoft.AspNetCore.Diagnostics;
 using OpenMovie.Application.CQRS.Models.Responses;
 using FluentValidation;
 using System.Text.Json;
 using System.Net;
+using OpenMovie.API;
 
 public class Program
 {
@@ -37,6 +36,17 @@ public class Program
             .AddCarter()
             .AddHttpClient<IMovieApiClient, OmdbApiClient>();
 
+        // Enable CORS based on configuration
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigins",
+                policyBuilder =>
+                {
+                    policyBuilder
+                        .WithOrigins(builder.Configuration.GetSection("CorsSettings").Get<CorsSettings>().AllowedOrigins);
+                });
+        });
+
         var app = builder.Build();
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -44,29 +54,13 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        app.UseCors(x => x
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .WithOrigins(builder.Configuration.GetSection("CorsSettings").Get<CorsSettings>().AllowedOrigins));
 
         app.UseHttpsRedirection();
-
-        var summaries = new[]
-        {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-        app.MapGet("/weatherforecast", () =>
-        {
-            var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-                .ToArray();
-            return forecast;
-        })
-        .WithName("GetWeatherForecast")
-        .WithOpenApi();
-
         app.MapCarter();
         app.UseExceptionHandler(appBuilder =>
         {
